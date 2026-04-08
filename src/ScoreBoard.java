@@ -19,9 +19,21 @@ public class ScoreBoard {
         }
     }
 
-    public void printScore() {
-        System.out.println("Score: Human:" + humanScore
-                + " Computer:" + computerScore
-                + " Draws=" + draws);
+    public int getHumanScore() {
+        return humanScore;
+    }
+
+    public int getComputerScore() {
+        return computerScore;
+    }
+
+    public int getDraws() {
+        return draws;
+    }
+
+    public void reset() {
+        humanScore = 0;
+        computerScore = 0;
+        draws = 0;
     }
 }
