@@ -21,4 +21,11 @@ public class ComputerPlayer implements Player {
     public String getStrategyName() {
         return strategy.getName();
     }
+
+    public Move getLastPredictedHumanMove() {
+        if (strategy instanceof MachineLearningChoiceStrategy) {
+            return ((MachineLearningChoiceStrategy) strategy).getLastPredictedHumanMove();
+        }
+        return null;
+    }
 }
