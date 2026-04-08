@@ -17,6 +17,7 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
     private final Random random;
     private final Map<String, Integer> frequencies;
     private final Deque<Character> history;
+    private Move lastPrediction = null;
 
     public MachineLearningChoiceStrategy(Random random) {
         this.random = random;
@@ -26,16 +27,13 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
     }
 
     @Override
-    public ComputerTurn chooseTurn() {
-        // Need at least N-1 previous choices to predict the next human move
+    public Move chooseMove() {
         if (history.size() < N - 1) {
-            Move computerMove = randomMove();
-            return new ComputerTurn(null, computerMove);
+            lastPrediction = null;
+            return randomMove();
         }
 
-        // Use only the last N-1 choices as the prefix
-        String prefix = getLastNMinusOneChoices();
-
+        String prefix = historyToString();
         String rockSequence = prefix + Move.ROCK.getSymbol();
         String paperSequence = prefix + Move.PAPER.getSymbol();
         String scissorsSequence = prefix + Move.SCISSORS.getSymbol();
@@ -46,24 +44,27 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
 
         int max = Math.max(rockCount, Math.max(paperCount, scissorsCount));
 
-        // No matching pattern found yet
         if (max == 0) {
-            Move computerMove = randomMove();
-            return new ComputerTurn(null, computerMove);
+            lastPrediction = null;
+            return randomMove();
         }
 
         Move predictedHumanMove;
-
-        if (rockCount == max) {
-            predictedHumanMove = Move.ROCK;
+        if (scissorsCount == max) {
+            predictedHumanMove = Move.SCISSORS;
         } else if (paperCount == max) {
             predictedHumanMove = Move.PAPER;
         } else {
-            predictedHumanMove = Move.SCISSORS;
+            predictedHumanMove = Move.ROCK;
         }
 
-        Move computerMove = predictedHumanMove.moveThatBeatsThis();
-        return new ComputerTurn(predictedHumanMove, computerMove);
+        lastPrediction = predictedHumanMove;
+        return predictedHumanMove.moveThatBeatsThis();
+    }
+
+    @Override
+    public Move getPredictedHumanMove() {
+        return lastPrediction;
     }
 
     @Override
@@ -71,7 +72,7 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
         addToHistory(computerMove.getSymbol());
         addToHistory(humanMove.getSymbol());
 
-        if (history.size() == N) {
+        if (history.size() >= N) {
             String sequence = lastNChoicesAsString();
             frequencies.put(sequence, frequencies.getOrDefault(sequence, 0) + 1);
         }
@@ -95,31 +96,21 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
     }
 
     private Move randomMove() {
-        int choice = random.nextInt(3) + 1;
-        return Move.fromInt(choice);
+        return Move.fromInt(random.nextInt(3) + 1);
     }
 
-    private void addToHistory(char moveSymbol) {
-        history.addLast(moveSymbol);
-
+    private void addToHistory(char choice) {
+        history.addLast(choice);
         while (history.size() > N) {
             history.removeFirst();
         }
     }
 
-    private String getLastNMinusOneChoices() {
+    private String historyToString() {
         StringBuilder sb = new StringBuilder();
-
-        int skip = history.size() - (N - 1);
-        int index = 0;
-
         for (char c : history) {
-            if (index >= skip) {
-                sb.append(c);
-            }
-            index++;
+            sb.append(c);
         }
-
         return sb.toString();
     }
 
@@ -133,17 +124,14 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
 
     private void loadData() {
         File file = new File(DATA_FILE);
-
         if (!file.exists()) {
             return;
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
-
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("=");
-
                 if (parts.length == 2) {
                     String sequence = parts[0].trim();
                     int count = Integer.parseInt(parts[1].trim());

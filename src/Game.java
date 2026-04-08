@@ -21,17 +21,18 @@ public class Game {
             System.out.println("Round " + round);
 
             Move humanMove = humanPlayer.chooseMove();
-            ComputerTurn turn = computerPlayer.chooseTurn();
 
-            Move computerMove = turn.getComputerMove();
-            Move predictedMove = turn.getPredictedHumanMove();
+            Move computerMove = computerPlayer.chooseMove();
+            Move predictedMove = computerPlayer.getPredictedHumanMove();
+
             if (predictedMove == null) {
-            System.out.println("Predicted human choice: Unknown");
+                System.out.println("Predicted human choice: Unknown");
             } else {
-            System.out.println("Predicted human choice: " + predictedMove.getDisplayName());
-            }
+                 System.out.println("Predicted human choice: " + predictedMove.getDisplayName());
+            }       
 
-            System.out.println("Computer chooses: " + computerMove.getDisplayName());
+            System.out.println("Computer chooses: " + computerMove.getDisplayName());  
+
 
             System.out.println("You chose " + humanMove.getDisplayName() + ".");
             System.out.println("The computer chose " + computerMove.getDisplayName() + ".");

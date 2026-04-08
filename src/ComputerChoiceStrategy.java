@@ -1,6 +1,7 @@
 public interface ComputerChoiceStrategy {
-    ComputerTurn chooseTurn();
+    Move chooseMove();
     void recordRound(Move humanMove, Move computerMove);
     void saveData();
     String getName();
+    Move getPredictedHumanMove();
 }

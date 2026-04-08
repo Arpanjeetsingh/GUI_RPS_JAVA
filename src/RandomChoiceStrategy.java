@@ -8,25 +8,26 @@ public class RandomChoiceStrategy implements ComputerChoiceStrategy {
     }
 
     @Override
-    public ComputerTurn chooseTurn() {
-        Move computerMove = Move.fromInt(random.nextInt(3) + 1);
-
-        // Random strategy has no real prediction, so use null
-        return new ComputerTurn(null, computerMove);
+    public Move chooseMove() {
+        int choice = random.nextInt(3) + 1;
+        return Move.fromInt(choice);
     }
 
     @Override
     public void recordRound(Move humanMove, Move computerMove) {
-        // No learning needed
     }
 
     @Override
     public void saveData() {
-        // Nothing to save
     }
 
     @Override
     public String getName() {
         return "Random";
+    }
+
+    @Override
+    public Move getPredictedHumanMove() {
+        return null;
     }
 }

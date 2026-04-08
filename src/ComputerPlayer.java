@@ -1,12 +1,13 @@
-public class ComputerPlayer {
+public class ComputerPlayer implements Player {
     private final ComputerChoiceStrategy strategy;
 
     public ComputerPlayer(ComputerChoiceStrategy strategy) {
         this.strategy = strategy;
     }
 
-    public ComputerTurn chooseTurn() {
-        return strategy.chooseTurn();
+    @Override
+    public Move chooseMove() {
+        return strategy.chooseMove();
     }
 
     public void recordRound(Move humanMove, Move computerMove) {
@@ -19,5 +20,9 @@ public class ComputerPlayer {
 
     public String getStrategyName() {
         return strategy.getName();
+    }
+
+    public Move getPredictedHumanMove() {
+        return strategy.getPredictedHumanMove();
     }
 }
