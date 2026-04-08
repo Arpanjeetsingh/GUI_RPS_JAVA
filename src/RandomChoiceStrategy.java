@@ -15,12 +15,10 @@ public class RandomChoiceStrategy implements ComputerChoiceStrategy {
 
     @Override
     public void recordRound(Move humanMove, Move computerMove) {
-        // No learning needed for random strategy
     }
 
     @Override
     public void saveData() {
-        // Nothing to save
     }
 
     @Override
