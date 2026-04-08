@@ -17,6 +17,7 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
     private final Random random;
     private final Map<String, Integer> frequencies;
     private final Deque<Character> history;
+    private Move lastPrediction = null;
 
     public MachineLearningChoiceStrategy(Random random) {
         this.random = random;
@@ -28,6 +29,7 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
     @Override
     public Move chooseMove() {
         if (history.size() < N - 1) {
+            lastPrediction = null;
             return randomMove();
         }
 
@@ -43,6 +45,7 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
         int max = Math.max(rockCount, Math.max(paperCount, scissorsCount));
 
         if (max == 0) {
+            lastPrediction = null;
             return randomMove();
         }
 
@@ -55,7 +58,13 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
             predictedHumanMove = Move.ROCK;
         }
 
+        lastPrediction = predictedHumanMove;
         return predictedHumanMove.moveThatBeatsThis();
+    }
+
+    @Override
+    public Move getPredictedHumanMove() {
+        return lastPrediction;
     }
 
     @Override

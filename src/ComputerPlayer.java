@@ -21,4 +21,8 @@ public class ComputerPlayer implements Player {
     public String getStrategyName() {
         return strategy.getName();
     }
+
+    public Move getPredictedHumanMove() {
+        return strategy.getPredictedHumanMove();
+    }
 }
