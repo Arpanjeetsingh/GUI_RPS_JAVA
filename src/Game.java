@@ -41,7 +41,6 @@ public class Game {
             printRoundMessage(result);
 
             scoreBoard.recordResult(result);
-            scoreBoard.printScore();
             System.out.println();
 
             computerPlayer.recordRound(humanMove, computerMove);
