@@ -22,10 +22,7 @@ public class ComputerPlayer implements Player {
         return strategy.getName();
     }
 
-    public Move getLastPredictedHumanMove() {
-        if (strategy instanceof MachineLearningChoiceStrategy) {
-            return ((MachineLearningChoiceStrategy) strategy).getLastPredictedHumanMove();
-        }
-        return null;
+    public Move getPredictedHumanMove() {
+        return strategy.getPredictedHumanMove();
     }
 }

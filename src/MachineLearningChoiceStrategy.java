@@ -17,21 +17,19 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
     private final Random random;
     private final Map<String, Integer> frequencies;
     private final Deque<Character> history;
-
-    private Move lastPredictedHumanMove;
+    private Move lastPrediction = null;
 
     public MachineLearningChoiceStrategy(Random random) {
         this.random = random;
         this.frequencies = new HashMap<>();
         this.history = new ArrayDeque<>();
-        this.lastPredictedHumanMove = null;
         loadData();
     }
 
     @Override
     public Move chooseMove() {
         if (history.size() < N - 1) {
-            lastPredictedHumanMove = null;
+            lastPrediction = null;
             return randomMove();
         }
 
@@ -47,19 +45,26 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
         int max = Math.max(rockCount, Math.max(paperCount, scissorsCount));
 
         if (max == 0) {
-            lastPredictedHumanMove = null;
+            lastPrediction = null;
             return randomMove();
         }
 
+        Move predictedHumanMove;
         if (scissorsCount == max) {
-            lastPredictedHumanMove = Move.SCISSORS;
+            predictedHumanMove = Move.SCISSORS;
         } else if (paperCount == max) {
-            lastPredictedHumanMove = Move.PAPER;
+            predictedHumanMove = Move.PAPER;
         } else {
-            lastPredictedHumanMove = Move.ROCK;
+            predictedHumanMove = Move.ROCK;
         }
 
-        return lastPredictedHumanMove.moveThatBeatsThis();
+        lastPrediction = predictedHumanMove;
+        return predictedHumanMove.moveThatBeatsThis();
+    }
+
+    @Override
+    public Move getPredictedHumanMove() {
+        return lastPrediction;
     }
 
     @Override
@@ -88,10 +93,6 @@ public class MachineLearningChoiceStrategy implements ComputerChoiceStrategy {
     @Override
     public String getName() {
         return "Machine Learning";
-    }
-
-    public Move getLastPredictedHumanMove() {
-        return lastPredictedHumanMove;
     }
 
     private Move randomMove() {

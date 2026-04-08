@@ -116,8 +116,7 @@ public class Main extends Application {
         humanChoiceLabel.setText("Human: " + humanMove.getDisplayName());
 
         Move computerMove = computerPlayer.chooseMove();
-        Move predicted = computerPlayer.getLastPredictedHumanMove();
-
+        Move predicted = computerPlayer.getPredictedHumanMove();
         if (predicted == null) {
             predictionLabel.setText("Prediction: none");
         } else {

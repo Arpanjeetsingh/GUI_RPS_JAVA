@@ -27,4 +27,9 @@ public class RandomChoiceStrategy implements ComputerChoiceStrategy {
     public String getName() {
         return "Random";
     }
+
+    @Override
+    public Move getPredictedHumanMove() {
+        return null;
+    }
 }
