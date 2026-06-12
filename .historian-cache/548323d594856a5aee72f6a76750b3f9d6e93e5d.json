@@ -1,0 +1,15 @@
+{
+  "sha": "548323d594856a5aee72f6a76750b3f9d6e93e5d",
+  "headline": "Added round display and user input buttons for rock-paper-scissors game",
+  "meaning": "This commit introduces a new game controller that displays the current round and allows users to make moves by clicking buttons. The chosen move is printed to the console, and the round number is incremented after each move. This change enables user interaction with the game, which is essential for its functionality. It also lays the groundwork for further development, such as adding game logic and AI opponents.",
+  "change_type": "feature",
+  "risk": "low",
+  "affected_areas": [
+    "GameController"
+  ],
+  "file_groups": {
+    "java": [
+      "src/GameController.java"
+    ]
+  }
+}
