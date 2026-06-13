@@ -53,3 +53,5 @@ src/
 ml_data.txt                           Saved ML frequency table (persists across games)
 pom.xml                               Maven build (handles JavaFX dependency)
 ```
+
+<!-- historian scribe CI test 20260612 -->
